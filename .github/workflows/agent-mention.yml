@@ -1,0 +1,22 @@
+name: agent mention
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Issue number to comment on
+        required: true
+        type: string
+permissions:
+  issues: write
+  contents: read
+jobs:
+  mention:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment as the Actions bot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE: ${{ inputs.issue_number }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$GH_REPO" --body "@royzuo 请把 README.md 中 'Repository used for a local deployment test of DeepSeek Super-agent + DeepSeek Harness.' 这一句改成 'Repository used for the local deployment test of DeepSeek Super-agent and DeepSeek Harness.'。只改这一句，不要动其他内容。"
